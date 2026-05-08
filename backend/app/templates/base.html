@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title or "跨编程语言项目的依赖与漏洞传播分析工具" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body data-page="{{ page }}">
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="/">依赖与漏洞传播分析工具</a>
+      <nav class="site-nav">
+        <a href="/" class="{{ 'active' if page == 'home' else '' }}">首页</a>
+        <a href="/analysis" class="{{ 'active' if page == 'analysis' else '' }}">项目扫描</a>
+        <a href="/risk" class="{{ 'active' if page == 'risk' else '' }}">风险总览</a>
+        <a href="/graph" class="{{ 'active' if page == 'graph' else '' }}">传播路径</a>
+        <a href="/remediation" class="{{ 'active' if page == 'remediation' else '' }}">修复建议</a>
+        <a href="/compare" class="{{ 'active' if page == 'compare' else '' }}">对比分析</a>
+        <a href="/history" class="{{ 'active' if page == 'history' else '' }}">历史记录</a>
+        <a href="/reports" class="{{ 'active' if page == 'reports' else '' }}">报告中心</a>
+      </nav>
+    </header>
+    {% block content %}{% endblock %}
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

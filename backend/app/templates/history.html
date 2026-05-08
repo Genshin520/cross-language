@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% set title = "历史记录 - 依赖与漏洞分析平台" %}
+
+{% block content %}
+<section class="page-intro">
+  <div>
+    <h1>历史记录</h1>
+    <p>点击任意记录可载入当时的分析结果，再前往风险总览或报告中心查看。</p>
+  </div>
+</section>
+
+<section class="card">
+  <div class="section-title">
+    <h2>历史扫描列表</h2>
+    <span>最近记录</span>
+  </div>
+  <p id="statusText" class="status-text">等待加载历史记录</p>
+  <div id="historyList" class="history-grid"></div>
+</section>
+{% endblock %}

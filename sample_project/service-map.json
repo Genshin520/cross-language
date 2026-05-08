@@ -1,0 +1,40 @@
+{
+  "relations": [
+    {
+      "source": "admin-frontend",
+      "target": "gateway-service",
+      "relation": "http_call"
+    },
+    {
+      "source": "customer-portal",
+      "target": "gateway-service",
+      "relation": "http_call"
+    },
+    {
+      "source": "gateway-service",
+      "target": "auth-service",
+      "relation": "auth_call"
+    },
+    {
+      "source": "gateway-service",
+      "target": "order-service",
+      "relation": "api_call"
+    },
+    {
+      "source": "gateway-service",
+      "target": "analytics-service",
+      "relation": "api_call"
+    },
+    {
+      "source": "analytics-service",
+      "target": "order-service",
+      "relation": "data_query"
+    },
+    {
+      "source": "order-service",
+      "target": "auth-service",
+      "relation": "token_check"
+    }
+  ]
+}
+

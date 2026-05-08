@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% set title = "跨编程语言项目的依赖与漏洞传播分析工具" %}
+
+{% block content %}
+<section class="academic-hero">
+  <div class="hero-main">
+    <h1>跨编程语言项目的依赖与漏洞传播分析工具</h1>
+    <p class="hero-copy">
+      本系统面向多语言软件项目，围绕依赖解析、漏洞识别、传播路径分析、风险评估和修复建议生成等环节，
+      帮助用户理解底层组件漏洞如何影响上层服务，为项目安全评估和毕业设计展示提供支撑。
+    </p>
+    <div class="hero-actions">
+      <a class="primary-link" href="/analysis">开始项目扫描</a>
+      <a class="secondary-link" href="/graph">查看传播路径</a>
+    </div>
+  </div>
+  <div class="research-panel">
+    <span>研究对象</span>
+    <strong>Java / JavaScript / Python 多语言项目</strong>
+    <p>通过统一依赖图模型，将服务模块、第三方组件、漏洞记录和影响范围关联起来。</p>
+  </div>
+</section>
+
+<section class="section-block">
+  <div class="section-heading">
+    <h2>系统功能</h2>
+    <p>按照分析流程组织功能入口，便于从扫描到结果解释再到报告归档。</p>
+  </div>
+  <div class="workflow-grid">
+    <a class="workflow-card primary" href="/analysis">
+      <span>01</span>
+      <strong>项目扫描</strong>
+      <p>解析多语言依赖文件，生成组件清单和基础统计结果。</p>
+    </a>
+    <a class="workflow-card" href="/risk">
+      <span>02</span>
+      <strong>风险分析</strong>
+      <p>识别漏洞组件，给出风险等级、影响范围和核心摘要。</p>
+    </a>
+    <a class="workflow-card" href="/graph">
+      <span>03</span>
+      <strong>传播建模</strong>
+      <p>展示服务调用关系与组件依赖关系，观察漏洞传播路径。</p>
+    </a>
+    <a class="workflow-card" href="/remediation">
+      <span>04</span>
+      <strong>修复建议</strong>
+      <p>根据风险优先级生成升级版本和处理建议。</p>
+    </a>
+  </div>
+</section>
+
+<section class="section-block compact-section">
+  <div class="section-heading">
+    <h2>辅助功能</h2>
+  </div>
+  <div class="utility-grid">
+    <a href="/compare">对比分析</a>
+    <a href="/history">历史记录</a>
+    <a href="/reports">报告中心</a>
+  </div>
+</section>
+{% endblock %}
