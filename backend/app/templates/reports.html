@@ -1,19 +1,15 @@
 {% extends "base.html" %}
-{% set title = "报告中心 - 依赖与漏洞分析平台" %}
+{% set title = "报告中心" %}
 
 {% block content %}
 <section class="page-intro">
-  <div>
-    <h1>报告中心</h1>
-    <p>下载最近一次扫描或历史回放生成的报告。</p>
-  </div>
+  <h1>报告中心</h1>
 </section>
 
 <section class="content-grid">
   <article class="card">
     <div class="section-title">
       <h2>报告下载</h2>
-      <span>三种格式</span>
     </div>
     <div id="reportActions" class="report-actions report-panel"></div>
   </article>
@@ -21,7 +17,6 @@
   <article class="card">
     <div class="section-title">
       <h2>当前结果</h2>
-      <span>确认报告来源</span>
     </div>
     <div id="summaryPanel" class="summary-panel"></div>
   </article>

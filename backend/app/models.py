@@ -12,6 +12,7 @@ class DependencyComponent:
     service: str
     dependency_type: str
     source_file: str
+    namespace: str = ""
 
     @property
     def component_id(self) -> str:
@@ -32,6 +33,10 @@ class VulnerabilityRecord:
     description: str
     fixed_version: str
     affected_versions: list[str]
+    source: str = "local"
+    cvss_score: float = 0.0
+    published_at: str = ""
+    last_modified_at: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

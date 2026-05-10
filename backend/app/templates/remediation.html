@@ -1,22 +1,12 @@
 {% extends "base.html" %}
-{% set title = "修复建议 - 依赖与漏洞分析平台" %}
+{% set title = "修复建议" %}
 
 {% block content %}
 <section class="page-intro">
-  <div>
-    <h1>修复建议</h1>
-    <p>根据风险等级、影响范围和建议版本生成修复优先级。</p>
-  </div>
+  <h1>修复建议</h1>
 </section>
 
-<section class="content-grid">
-  <article class="card wide">
-    <div class="section-title">
-      <h2>优先修复清单</h2>
-      <span>按风险和影响范围排序</span>
-    </div>
-    <div id="remediationList" class="remediation-list"></div>
-  </article>
+<section class="remediation-workbench">
+  <div id="remediationList" class="remediation-list"></div>
 </section>
 {% endblock %}
-

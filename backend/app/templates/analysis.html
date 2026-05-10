@@ -1,19 +1,27 @@
 {% extends "base.html" %}
-{% set title = "项目扫描 - 依赖与漏洞分析平台" %}
+{% set title = "项目扫描" %}
 
 {% block content %}
 <section class="page-intro">
-  <div>
-    <h1>项目扫描</h1>
-    <p>输入项目目录后开始分析，也可以使用示例项目快速查看效果。</p>
-  </div>
+  <h1>项目扫描</h1>
 </section>
 
 <section class="control-panel">
-  <label for="projectPath">项目路径</label>
+  <label for="projectPath">项目路径扫描</label>
   <div class="control-row">
-    <input id="projectPath" type="text" placeholder="输入待扫描项目目录绝对路径" />
+    <input id="projectPath" type="text" placeholder="输入待扫描项目目录的绝对路径" />
     <button id="scanBtn">开始扫描</button>
+  </div>
+  <div class="upload-scan-panel">
+    <div>
+      <label for="projectFolder">选择项目文件夹</label>
+      <input id="projectFolder" type="file" webkitdirectory directory multiple />
+    </div>
+    <div>
+      <label for="projectArchive">或上传 ZIP 项目包</label>
+      <input id="projectArchive" type="file" accept=".zip,application/zip" />
+    </div>
+    <button id="uploadScanBtn" type="button" class="secondary-action">上传并扫描</button>
   </div>
   <div class="control-row secondary">
     <button id="sampleBtn" class="ghost">加载示例项目</button>
@@ -26,9 +34,9 @@
 <section class="section-block">
   <div class="section-heading">
     <h2>扫描结果概览</h2>
-    <p>这里显示最近一次扫描的核心指标。</p>
   </div>
   <div class="stats-grid" id="statsGrid"></div>
+  <div class="architecture-summary" id="architectureSummary"></div>
   <div class="summary-panel" id="summaryPanel"></div>
 </section>
 {% endblock %}

@@ -46,6 +46,7 @@ def _parse_pom(file_path: Path, root: Path) -> list[DependencyComponent]:
     dependencies = tree.findall(".//mvn:dependency", ns)
     components: list[DependencyComponent] = []
     for dependency in dependencies:
+        group = dependency.findtext("mvn:groupId", default="", namespaces=ns).strip()
         artifact = dependency.findtext("mvn:artifactId", default="", namespaces=ns).strip()
         version = dependency.findtext("mvn:version", default="unknown", namespaces=ns).strip()
         scope = dependency.findtext("mvn:scope", default="direct", namespaces=ns).strip()
@@ -58,6 +59,7 @@ def _parse_pom(file_path: Path, root: Path) -> list[DependencyComponent]:
                     service=service,
                     dependency_type=scope,
                     source_file=str(file_path),
+                    namespace=group,
                 )
             )
     return components
@@ -73,6 +75,7 @@ def _parse_package_json(file_path: Path, root: Path) -> list[DependencyComponent
     components: list[DependencyComponent] = []
     for dep_type in ("dependencies", "devDependencies"):
         for name, version in content.get(dep_type, {}).items():
+            namespace = name.split("/")[0] if name.startswith("@") and "/" in name else ""
             components.append(
                 DependencyComponent(
                     name=name,
@@ -81,6 +84,7 @@ def _parse_package_json(file_path: Path, root: Path) -> list[DependencyComponent
                     service=service,
                     dependency_type=dep_type,
                     source_file=str(file_path),
+                    namespace=namespace,
                 )
             )
     return components
@@ -115,4 +119,3 @@ def _parse_requirements(file_path: Path, root: Path) -> list[DependencyComponent
 
 def _clean_js_version(version: str) -> str:
     return version.lstrip("^~><= ").strip() or "unknown"
-

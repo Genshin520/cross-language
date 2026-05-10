@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% set title = "可视分析" %}
+
+{% block content %}
+<section class="page-intro">
+  <h1>可视分析</h1>
+  <a class="secondary-link compact" href="/analysis">重新扫描</a>
+</section>
+
+<section class="visual-workbench">
+  <aside class="visual-side-nav" aria-label="可视分析导航">
+    <button type="button" class="visual-nav-item active" data-visual-target="visual-overview">总览指标</button>
+    <button type="button" class="visual-nav-item" data-visual-target="visual-service">服务影响</button>
+    <button type="button" class="visual-nav-item" data-visual-target="visual-language">语言风险</button>
+    <button type="button" class="visual-nav-item" data-visual-target="visual-risk">等级矩阵</button>
+    <button type="button" class="visual-nav-item" data-visual-target="visual-repair">修复队列</button>
+  </aside>
+
+  <div class="visual-detail-stack">
+    <article id="visual-overview" class="visual-section active">
+      <div class="section-title">
+        <h2>总览指标</h2>
+      </div>
+      <div id="visualKpis" class="visual-kpis"></div>
+    </article>
+
+    <article id="visual-service" class="visual-section">
+      <div class="section-title">
+        <h2>服务影响排行</h2>
+      </div>
+      <div id="serviceHeatmap" class="impact-rank-box"></div>
+    </article>
+
+    <article id="visual-language" class="visual-section">
+      <div class="section-title">
+        <h2>语言风险分布</h2>
+      </div>
+      <div id="languageChart" class="chart-box"></div>
+    </article>
+
+    <article id="visual-risk" class="visual-section">
+      <div class="section-title">
+        <h2>风险等级矩阵</h2>
+      </div>
+      <div id="riskDonut" class="risk-matrix-box"></div>
+    </article>
+
+    <article id="visual-repair" class="visual-section">
+      <div class="section-title">
+        <h2>修复优先级队列</h2>
+      </div>
+      <div id="remediationChart" class="repair-queue-box"></div>
+    </article>
+  </div>
+</section>
+{% endblock %}

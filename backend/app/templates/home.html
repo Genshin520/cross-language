@@ -2,62 +2,61 @@
 {% set title = "跨编程语言项目的依赖与漏洞传播分析工具" %}
 
 {% block content %}
-<section class="academic-hero">
-  <div class="hero-main">
+<section class="home-hero">
+  <div>
+    <p class="product-kicker">Dependency Vulnerability Analysis</p>
     <h1>跨编程语言项目的依赖与漏洞传播分析工具</h1>
-    <p class="hero-copy">
-      本系统面向多语言软件项目，围绕依赖解析、漏洞识别、传播路径分析、风险评估和修复建议生成等环节，
-      帮助用户理解底层组件漏洞如何影响上层服务，为项目安全评估和毕业设计展示提供支撑。
-    </p>
-    <div class="hero-actions">
-      <a class="primary-link" href="/analysis">开始项目扫描</a>
-      <a class="secondary-link" href="/graph">查看传播路径</a>
+  </div>
+  <div class="hero-actions">
+    <a class="primary-link" href="/analysis">开始项目扫描</a>
+    <a class="secondary-link" href="/visualization">查看可视分析</a>
+  </div>
+</section>
+
+<section class="home-dashboard">
+  <article class="home-panel main-panel">
+    <div class="section-heading">
+      <h2>工作台</h2>
     </div>
-  </div>
-  <div class="research-panel">
-    <span>研究对象</span>
-    <strong>Java / JavaScript / Python 多语言项目</strong>
-    <p>通过统一依赖图模型，将服务模块、第三方组件、漏洞记录和影响范围关联起来。</p>
-  </div>
-</section>
+    <div class="home-action-grid">
+      <a class="home-action primary" href="/analysis">
+        <span>01</span>
+        <strong>项目扫描</strong>
+        <small>导入项目并生成依赖、漏洞和传播分析结果</small>
+      </a>
+      <a class="home-action" href="/risk">
+        <span>02</span>
+        <strong>风险总览</strong>
+        <small>查看漏洞组件、风险等级和影响范围</small>
+      </a>
+      <a class="home-action" href="/graph">
+        <span>03</span>
+        <strong>传播路径</strong>
+        <small>高亮漏洞组件对上下游模块的影响链路</small>
+      </a>
+      <a class="home-action" href="/remediation">
+        <span>04</span>
+        <strong>修复建议</strong>
+        <small>按优先级查看版本升级和修复方案</small>
+      </a>
+    </div>
+  </article>
 
-<section class="section-block">
-  <div class="section-heading">
-    <h2>系统功能</h2>
-    <p>按照分析流程组织功能入口，便于从扫描到结果解释再到报告归档。</p>
-  </div>
-  <div class="workflow-grid">
-    <a class="workflow-card primary" href="/analysis">
-      <span>01</span>
-      <strong>项目扫描</strong>
-      <p>解析多语言依赖文件，生成组件清单和基础统计结果。</p>
-    </a>
-    <a class="workflow-card" href="/risk">
-      <span>02</span>
-      <strong>风险分析</strong>
-      <p>识别漏洞组件，给出风险等级、影响范围和核心摘要。</p>
-    </a>
-    <a class="workflow-card" href="/graph">
-      <span>03</span>
-      <strong>传播建模</strong>
-      <p>展示服务调用关系与组件依赖关系，观察漏洞传播路径。</p>
-    </a>
-    <a class="workflow-card" href="/remediation">
-      <span>04</span>
-      <strong>修复建议</strong>
-      <p>根据风险优先级生成升级版本和处理建议。</p>
-    </a>
-  </div>
-</section>
-
-<section class="section-block compact-section">
-  <div class="section-heading">
-    <h2>辅助功能</h2>
-  </div>
-  <div class="utility-grid">
-    <a href="/compare">对比分析</a>
-    <a href="/history">历史记录</a>
-    <a href="/reports">报告中心</a>
-  </div>
+  <aside class="home-panel report-home-panel">
+    <div class="section-heading">
+      <h2>报告摘要</h2>
+    </div>
+    <div class="report-summary-card">
+      <strong>分析报告</strong>
+      <p>完成扫描后，可在这里下载 JSON、TXT 与 HTML 格式的项目分析报告。</p>
+      <div id="reportActions" class="report-actions report-home-actions">
+        <div class="report-placeholder">
+          <span>暂无报告</span>
+          <a href="/analysis">先去扫描</a>
+        </div>
+      </div>
+      <a class="secondary-link report-center-link" href="/reports">进入报告中心</a>
+    </div>
+  </aside>
 </section>
 {% endblock %}

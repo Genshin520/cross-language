@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% set title = "漏洞库" %}
+
+{% block content %}
+<section class="page-intro">
+  <h1>漏洞库</h1>
+  <div class="vuln-sync-actions">
+    <button type="button" data-sync-source="nvd">同步 NVD</button>
+    <button type="button" data-sync-source="oss">同步 OSS Index</button>
+  </div>
+</section>
+
+<section class="vuln-library-layout">
+  <article class="card">
+    <div class="section-title">
+      <h2>漏洞来源</h2>
+    </div>
+    <div id="vulnerabilitySources" class="source-list"></div>
+  </article>
+
+  <article class="card">
+    <div class="section-title">
+      <h2>同步组件</h2>
+    </div>
+    <label for="syncComponents" class="impact-select-label">组件名称</label>
+    <textarea id="syncComponents" class="sync-components-input" placeholder="例如：log4j-core, lodash, requests"></textarea>
+    <p id="vulnerabilityStatus" class="status-text">可输入组件名后同步，留空则使用最近一次扫描的组件。</p>
+  </article>
+
+  <article class="card wide">
+    <div class="section-title">
+      <h2>外部漏洞缓存</h2>
+    </div>
+    <div id="vulnerabilityLibrary" class="compact-result-list"></div>
+  </article>
+</section>
+{% endblock %}

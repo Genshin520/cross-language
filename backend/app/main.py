@@ -1,13 +1,27 @@
 from __future__ import annotations
 
 import os
+import shutil
+import uuid
+import zipfile
 from pathlib import Path
 
-from flask import Flask, jsonify, render_template, request, send_from_directory
+from flask import Flask, jsonify, render_template, request, send_from_directory, session
+from werkzeug.utils import secure_filename
 
-from .config import REPORT_DIR, SAMPLE_PROJECT_DIR
-from .repositories import fetch_recent_scan_details, fetch_scan_detail, fetch_scan_history, init_db
+from .config import REPORT_DIR, SAMPLE_PROJECT_DIR, UPLOAD_DIR
+from .repositories import (
+    authenticate_user,
+    create_user,
+    fetch_scan_detail,
+    fetch_scan_history,
+    fetch_recent_scan_details,
+    fetch_vulnerability_library,
+    fetch_vulnerability_sources,
+    init_db,
+)
 from .scanner import run_project_scan
+from .vulnerability_sync import sync_nvd_for_components, sync_oss_index_for_components, sync_vulnerability_sources
 
 
 def register_routes(app: Flask) -> None:
@@ -15,6 +29,10 @@ def register_routes(app: Flask) -> None:
 
     @app.get("/")
     def index():
+        return render_template("login.html", page="login")
+
+    @app.get("/home")
+    def home_page():
         return render_template("home.html", page="home")
 
     @app.get("/analysis")
@@ -29,6 +47,10 @@ def register_routes(app: Flask) -> None:
     def graph_page():
         return render_template("graph.html", page="graph")
 
+    @app.get("/visualization")
+    def visualization_page():
+        return render_template("visualization.html", page="visualization")
+
     @app.get("/history")
     def history_page():
         return render_template("history.html", page="history")
@@ -41,24 +63,79 @@ def register_routes(app: Flask) -> None:
     def remediation_page():
         return render_template("remediation.html", page="remediation")
 
-    @app.get("/compare")
-    def compare_page():
-        return render_template("compare.html", page="compare")
+    @app.get("/vulnerabilities")
+    def vulnerabilities_page():
+        return render_template("vulnerabilities.html", page="vulnerabilities")
 
     @app.get("/api/health")
     def health():
         return jsonify({"status": "ok"})
 
+    @app.get("/api/session")
+    def current_session():
+        return jsonify({"authenticated": "user" in session, "user": session.get("user")})
+
+    @app.post("/api/register")
+    def register():
+        payload = request.get_json(silent=True) or {}
+        user, error = create_user(
+            payload.get("username", ""),
+            payload.get("email", ""),
+            payload.get("password", ""),
+        )
+        if error:
+            return _json_error(error, 400)
+        session["user"] = user
+        return jsonify({"user": user})
+
+    @app.post("/api/login")
+    def login():
+        payload = request.get_json(silent=True) or {}
+        user, error = authenticate_user(payload.get("account", ""), payload.get("password", ""))
+        if error:
+            return _json_error(error, 400)
+        session["user"] = user
+        return jsonify({"user": user})
+
+    @app.post("/api/logout")
+    def logout():
+        session.pop("user", None)
+        return jsonify({"ok": True})
+
     @app.get("/api/history")
     def history():
         return jsonify({"items": fetch_scan_history()})
 
-    @app.get("/api/compare/latest")
-    def compare_latest():
-        scans = fetch_recent_scan_details(2)
-        if len(scans) < 2:
-            return _json_error("至少需要两次扫描记录才能进行对比", 404)
-        return jsonify(_compare_scans(scans[1], scans[0]))
+    @app.get("/api/vulnerability-sources")
+    def vulnerability_sources():
+        return jsonify({"items": fetch_vulnerability_sources()})
+
+    @app.get("/api/vulnerabilities")
+    def vulnerabilities():
+        return jsonify(fetch_vulnerability_library())
+
+    @app.post("/api/vulnerabilities/sync")
+    def sync_vulnerabilities():
+        try:
+            components = _components_for_sync(request.get_json(silent=True) or {})
+            result = sync_vulnerability_sources(components)
+            return jsonify(result)
+        except Exception as exc:
+            return _json_error(f"漏洞源同步失败：{exc}", 500)
+
+    @app.post("/api/vulnerabilities/sync/<source_name>")
+    def sync_vulnerability_source(source_name: str):
+        try:
+            components = _components_for_sync(request.get_json(silent=True) or {})
+            if source_name == "nvd":
+                result = sync_nvd_for_components(components)
+            elif source_name == "oss":
+                result = sync_oss_index_for_components(components)
+            else:
+                return _json_error("未知漏洞源", 400)
+            return jsonify(result)
+        except Exception as exc:
+            return _json_error(f"漏洞源同步失败：{exc}", 500)
 
     @app.get("/api/history/<int:scan_id>")
     def history_detail(scan_id: int):
@@ -89,6 +166,40 @@ def register_routes(app: Flask) -> None:
             return validation_error
         return jsonify(run_project_scan(project_path))
 
+    @app.post("/api/scan-upload")
+    def scan_upload():
+        files = request.files.getlist("files")
+        archive = request.files.get("archive")
+        if not files and not archive:
+            return _json_error("请先选择项目文件夹或 ZIP 项目包", 400)
+
+        upload_root = UPLOAD_DIR / uuid.uuid4().hex
+        upload_root.mkdir(parents=True, exist_ok=True)
+        try:
+            if archive and archive.filename:
+                target = upload_root / secure_filename(archive.filename)
+                archive.save(target)
+                if target.suffix.lower() != ".zip" or not zipfile.is_zipfile(target):
+                    return _json_error("当前仅支持上传 ZIP 项目包", 400)
+                extract_dir = upload_root / "project"
+                extract_dir.mkdir(parents=True, exist_ok=True)
+                _safe_extract_zip(target, extract_dir)
+                project_path = _first_project_directory(extract_dir)
+            else:
+                project_path = upload_root / "project"
+                project_path.mkdir(parents=True, exist_ok=True)
+                for file in files:
+                    relative_name = file.filename or secure_filename(file.name or "uploaded-file")
+                    destination = _safe_upload_path(project_path, relative_name)
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    file.save(destination)
+            return jsonify(run_project_scan(str(project_path)))
+        except ValueError as exc:
+            return _json_error(str(exc), 400)
+        except Exception as exc:
+            shutil.rmtree(upload_root, ignore_errors=True)
+            return _json_error(f"上传扫描失败：{exc}", 500)
+
 
 def _validate_project_path(project_path: str):
     if not project_path:
@@ -106,49 +217,39 @@ def _json_error(message: str, status_code: int):
     return jsonify({"error": message}), status_code
 
 
-def _compare_scans(previous: dict, current: dict) -> dict:
-    previous_vulns = {item["component_id"]: item for item in previous.get("vulnerabilities", [])}
-    current_vulns = {item["component_id"]: item for item in current.get("vulnerabilities", [])}
-    previous_components = {item["component_id"]: item for item in previous.get("components", [])}
-    current_components = {item["component_id"]: item for item in current.get("components", [])}
-
-    new_risks = sorted(set(current_vulns) - set(previous_vulns))
-    resolved_risks = sorted(set(previous_vulns) - set(current_vulns))
-    unchanged_risks = sorted(set(previous_vulns) & set(current_vulns))
-
-    return {
-        "previous": _scan_snapshot(previous),
-        "current": _scan_snapshot(current),
-        "delta": {
-            "component_count": current["statistics"]["component_count"] - previous["statistics"]["component_count"],
-            "vulnerability_count": current["statistics"]["vulnerable_component_count"] - previous["statistics"]["vulnerable_component_count"],
-            "affected_service_count": current["statistics"]["affected_service_count"] - previous["statistics"]["affected_service_count"],
-        },
-        "new_risks": [_component_label(current_components, current_vulns, component_id) for component_id in new_risks],
-        "resolved_risks": [_component_label(previous_components, previous_vulns, component_id) for component_id in resolved_risks],
-        "unchanged_risks": [_component_label(current_components, current_vulns, component_id) for component_id in unchanged_risks],
-    }
+def _components_for_sync(payload: dict) -> list[dict]:
+    component_names = [name.strip() for name in payload.get("components", []) if str(name).strip()]
+    latest = fetch_recent_scan_details(1)
+    if component_names:
+        latest_components = latest[0].get("components", []) if latest else []
+        by_name = {item.get("name", ""): item for item in latest_components}
+        return [by_name.get(name, {"name": name}) for name in component_names]
+    return latest[0].get("components", []) if latest else []
 
 
-def _scan_snapshot(scan: dict) -> dict:
-    return {
-        "project_name": scan["project_name"],
-        "scanned_at": scan["scanned_at"],
-        "component_count": scan["statistics"]["component_count"],
-        "vulnerability_count": scan["statistics"]["vulnerable_component_count"],
-        "affected_service_count": scan["statistics"]["affected_service_count"],
-    }
+def _safe_upload_path(root: Path, relative_name: str) -> Path:
+    safe_parts = [secure_filename(part) for part in Path(relative_name).parts if part not in {"", ".", ".."}]
+    if not safe_parts:
+        raise ValueError("上传文件名不合法")
+    destination = root.joinpath(*safe_parts).resolve()
+    if not str(destination).startswith(str(root.resolve())):
+        raise ValueError("上传路径不合法")
+    return destination
 
 
-def _component_label(components: dict, vulnerabilities: dict, component_id: str) -> dict:
-    component = components.get(component_id, {})
-    vulnerability = vulnerabilities.get(component_id, {})
-    return {
-        "component_id": component_id,
-        "name": component.get("name") or vulnerability.get("component_name") or component_id,
-        "version": component.get("version") or vulnerability.get("component_version") or "",
-        "service": component.get("service") or vulnerability.get("service") or "",
-    }
+def _safe_extract_zip(zip_path: Path, target_dir: Path) -> None:
+    with zipfile.ZipFile(zip_path) as archive:
+        for member in archive.infolist():
+            destination = (target_dir / member.filename).resolve()
+            if not str(destination).startswith(str(target_dir.resolve())):
+                raise ValueError("ZIP 文件包含不安全路径")
+        archive.extractall(target_dir)
+
+
+def _first_project_directory(root: Path) -> Path:
+    children = [item for item in root.iterdir() if item.is_dir()]
+    files = [item for item in root.iterdir() if item.is_file()]
+    return children[0] if len(children) == 1 and not files else root
 
 
 if __name__ == "__main__":

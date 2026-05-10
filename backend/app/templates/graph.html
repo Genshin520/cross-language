@@ -1,30 +1,44 @@
 {% extends "base.html" %}
-{% set title = "传播路径 - 依赖与漏洞分析平台" %}
+{% set title = "传播路径" %}
 
 {% block content %}
 <section class="page-intro graph-intro">
   <div>
     <h1>传播路径</h1>
-    <p>关系图将服务调用、组件依赖和风险组件放在同一视图中，用于观察漏洞可能影响到的服务范围。</p>
   </div>
   <div class="graph-tools" id="graphTools">
-    <button type="button" data-action="fit">居中</button>
+    <button type="button" data-action="fit">适配全图</button>
     <button type="button" data-action="zoom-in">放大</button>
     <button type="button" data-action="zoom-out">缩小</button>
   </div>
 </section>
 
-<section class="graph-layout">
-  <aside class="graph-side">
-    <h2>图例说明</h2>
-    <div class="legend-row vertical" id="graphLegend"></div>
-    <div class="graph-note">
-      <strong>阅读方式</strong>
-      <p>左侧为服务节点，右侧为依赖组件。红色节点表示已命中漏洞库的组件，连线表示服务调用或依赖关系。</p>
+<section class="graph-workbench">
+  <section class="graph-main-card">
+    <div class="graph-summary-strip" id="graphStats">
+      <span>等待载入图谱</span>
     </div>
-  </aside>
-  <section class="graph-workspace">
-    <div id="graphCanvas" class="graph-canvas"></div>
+    <div class="graph-workspace">
+      <div id="graphCanvas" class="graph-canvas"></div>
+    </div>
   </section>
+
+  <aside class="graph-inspector">
+    <article class="graph-panel" id="graphImpactPanel">
+      <strong>模块影响展示</strong>
+    </article>
+    <article class="graph-panel" id="architectureProfile">
+      <strong>项目架构识别</strong>
+    </article>
+    <article class="graph-panel">
+      <strong>图例</strong>
+      <div class="legend-row vertical" id="graphLegend"></div>
+    </article>
+    <article class="graph-panel graph-history-panel">
+      <strong>历史记录</strong>
+      <p id="statusText" class="status-text">等待加载历史记录</p>
+      <div id="historyList" class="history-grid graph-history-list"></div>
+    </article>
+  </aside>
 </section>
 {% endblock %}

@@ -1,17 +1,15 @@
 {% extends "base.html" %}
-{% set title = "风险总览 - 依赖与漏洞分析平台" %}
+{% set title = "风险总览" %}
 
 {% block content %}
 <section class="page-intro">
   <h1>风险总览</h1>
-  <p>查看风险摘要、漏洞组件和受影响服务。详细分析结果可通过按钮展开查看。</p>
 </section>
 
 <section class="content-grid">
   <article class="card">
     <div class="section-title">
       <h2>风险摘要</h2>
-      <span>最近一次扫描结果</span>
     </div>
     <div id="summaryPanel" class="summary-panel compact-panel"></div>
   </article>
@@ -19,7 +17,6 @@
   <article class="card">
     <div class="section-title">
       <h2>整体分布</h2>
-      <span>按语言、服务和风险等级汇总</span>
     </div>
     <div id="distributionPanel" class="distribution-panel compact-panel"></div>
   </article>
@@ -27,7 +24,6 @@
   <article class="card wide">
     <div class="section-title">
       <h2>分析结果</h2>
-      <span>点击详情查看完整内容</span>
     </div>
     <div class="result-tabs">
       <button class="tab-button active" data-target="vulnerabilityList">漏洞组件</button>
