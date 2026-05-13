@@ -1,0 +1,145 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="database-er" name="数据库ER关系图">
+    <mxGraphModel dx="1868" dy="1065" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontFamily=宋体;fontSize=20;fontStyle=1;labelBackgroundColor=none;" value="数据库 ER 关系图" vertex="1">
+          <mxGeometry height="40" width="360" x="620" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="users" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;users&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;username&lt;br&gt;email&lt;br&gt;password_hash&lt;br&gt;role, status" vertex="1">
+          <mxGeometry height="115" width="190" x="61" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="user_login_events" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;user_login_events&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK user_id&lt;br&gt;event_type&lt;br&gt;event_status&lt;br&gt;created_at" vertex="1">
+          <mxGeometry height="115" width="190" x="277" y="47" as="geometry" />
+        </mxCell>
+        <mxCell id="projects" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;projects&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;project_name&lt;br&gt;project_path&lt;br&gt;first_seen_at&lt;br&gt;last_scanned_at&lt;br&gt;scan_count" vertex="1">
+          <mxGeometry height="130" width="220" x="568" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="scan_records" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;scan_records&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK project_id&lt;br&gt;project_name, scanned_at&lt;br&gt;component_count, service_count&lt;br&gt;vulnerability_count&lt;br&gt;risk_levels, report_files&lt;br&gt;result_payload" vertex="1">
+          <mxGeometry height="155" width="260" x="550" y="316" as="geometry" />
+        </mxCell>
+        <mxCell id="services" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;services&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;service_name&lt;br&gt;component_count&lt;br&gt;vulnerability_count&lt;br&gt;language_set" vertex="1">
+          <mxGeometry height="125" width="200" x="55" y="211" as="geometry" />
+        </mxCell>
+        <mxCell id="components" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;components&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;component_uid&lt;br&gt;component_name&lt;br&gt;version, language&lt;br&gt;service_name&lt;br&gt;dependency_type" vertex="1">
+          <mxGeometry height="145" width="210" x="47" y="372" as="geometry" />
+        </mxCell>
+        <mxCell id="service_relations" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;service_relations&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;source_service&lt;br&gt;target_service&lt;br&gt;relation_type" vertex="1">
+          <mxGeometry height="115" width="209" x="47" y="541" as="geometry" />
+        </mxCell>
+        <mxCell id="graph_nodes" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;graph_nodes&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;node_uid&lt;br&gt;label&lt;br&gt;node_type&lt;br&gt;language, service_name" vertex="1">
+          <mxGeometry height="125" width="210" x="48" y="682" as="geometry" />
+        </mxCell>
+        <mxCell id="graph_edges" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;graph_edges&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;source_uid&lt;br&gt;target_uid&lt;br&gt;relation_type" vertex="1">
+          <mxGeometry height="115" width="210" x="48" y="845" as="geometry" />
+        </mxCell>
+        <mxCell id="vulnerabilities" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;vulnerabilities&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;cve_id&lt;br&gt;component_name&lt;br&gt;language&lt;br&gt;severity&lt;br&gt;affected_versions" vertex="1">
+          <mxGeometry height="125" width="220" x="920" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="external_vulnerabilities" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;external_vulnerabilities&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;source_name&lt;br&gt;cve_id&lt;br&gt;component_name&lt;br&gt;language&lt;br&gt;severity, cvss_score" vertex="1">
+          <mxGeometry height="125" width="240" x="1210" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="vulnerability_sources" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;vulnerability_sources&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;source_name&lt;br&gt;api_url&lt;br&gt;enabled&lt;br&gt;last_synced_at&lt;br&gt;last_status" vertex="1">
+          <mxGeometry height="125" width="240" x="1210" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="vulnerability_sync_logs" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;vulnerability_sync_logs&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;source_name&lt;br&gt;status&lt;br&gt;message&lt;br&gt;record_count&lt;br&gt;created_at" vertex="1">
+          <mxGeometry height="125" width="240" x="1210" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="propagation_paths" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;propagation_paths&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;component_uid&lt;br&gt;path_type&lt;br&gt;path_nodes&lt;br&gt;affected_service&lt;br&gt;depth" vertex="1">
+          <mxGeometry height="145" width="220" x="738" y="705" as="geometry" />
+        </mxCell>
+        <mxCell id="risk_assessments" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;risk_assessments&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;component_uid&lt;br&gt;component_name&lt;br&gt;risk_level&lt;br&gt;score&lt;br&gt;reason" vertex="1">
+          <mxGeometry height="145" width="250" x="890" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="remediation_suggestions" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;remediation_suggestions&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;component_uid&lt;br&gt;target_version&lt;br&gt;priority&lt;br&gt;risk_level&lt;br&gt;suggestion" vertex="1">
+          <mxGeometry height="145" width="250" x="1180" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="reports" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;reports&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;report_type&lt;br&gt;filename&lt;br&gt;file_path&lt;br&gt;created_at" vertex="1">
+          <mxGeometry height="125" width="220" x="520" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="scan_statistics" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;scan_statistics&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;metric_group&lt;br&gt;metric_name&lt;br&gt;metric_value" vertex="1">
+          <mxGeometry height="115" width="220" x="520" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="analysis_methods" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;analysis_methods&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;component_uid&lt;br&gt;method_name" vertex="1">
+          <mxGeometry height="100" width="220" x="770" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="architecture_profiles" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;architecture_profiles&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;architecture_type&lt;br&gt;description&lt;br&gt;languages&lt;br&gt;service_count&lt;br&gt;relation_count" vertex="1">
+          <mxGeometry height="145" width="240" x="1020" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="module_impacts" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;module_impacts&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;component_uid&lt;br&gt;upstream_modules&lt;br&gt;direct_callers&lt;br&gt;downstream_modules&lt;br&gt;impact_scope" vertex="1">
+          <mxGeometry height="145" width="240" x="1300" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="e_users_events" edge="1" parent="1" source="users" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="user_login_events" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_projects_scans" edge="1" parent="1" source="projects" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="scan_records" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_services" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="services" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_components" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="components" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_relations" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="service_relations" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_nodes" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="graph_nodes" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_edges" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="graph_edges" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_vulns" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="scan_vulnerabilities" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_component_scan_vulns" edge="1" parent="1" source="components" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="scan_vulnerabilities" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_vuln_scan_vulns" edge="1" parent="1" source="vulnerabilities" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="scan_vulnerabilities" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_source_external" edge="1" parent="1" source="vulnerability_sources" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="external_vulnerabilities" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_source_logs" edge="1" parent="1" source="vulnerability_sources" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="vulnerability_sync_logs" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_paths" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="propagation_paths" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_risks" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="risk_assessments" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_reports" edge="1" parent="1" source="scan_vulnerabilities" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="reports" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_stats" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="scan_statistics" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_methods" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="analysis_methods" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_architecture" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="architecture_profiles" value="1:1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_impacts" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="module_impacts" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_remediation" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="remediation_suggestions" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AywloGaETasXI6b1wWCt-1" edge="1" parent="1" source="scan_records" style="endArrow=classic;html=1;rounded=0;fontFamily=宋体;fontSize=11;labelBackgroundColor=none;fontColor=default;" target="scan_vulnerabilities" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="671" y="471" as="sourcePoint" />
+            <mxPoint x="637" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="scan_vulnerabilities" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体;fontSize=12;align=left;verticalAlign=top;spacing=8;labelBackgroundColor=none;" value="&lt;b&gt;scan_vulnerabilities&lt;/b&gt;&lt;br&gt;PK id&lt;br&gt;FK scan_id&lt;br&gt;component_uid&lt;br&gt;cve_id&lt;br&gt;risk_level, score&lt;br&gt;propagation_score&lt;br&gt;max_depth" vertex="1">
+          <mxGeometry height="145" width="250" x="556" y="528" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
